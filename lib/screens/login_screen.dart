@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/widgets/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    _LoginForm()
+                    const _LoginForm()
                   ],
                 ),
               ),
@@ -40,7 +41,10 @@ class LoginScreen extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 50,
+              ),
             ],
           ),
         ),
@@ -61,26 +65,42 @@ class _LoginForm extends StatelessWidget {
             TextFormField(
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.deepPurple,
-                  ),
+              decoration: InputDecorations.authInputDecoration(
+                  hintText: 'email@sample.com',
+                  labelText: 'Email',
+                  prefixIcon: Icons.alternate_email_sharp),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              autocorrect: false,
+              obscureText: true,
+              keyboardType: TextInputType.text,
+              decoration: InputDecorations.authInputDecoration(
+                  hintText: '*****',
+                  labelText: 'Password',
+                  prefixIcon: Icons.lock),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            MaterialButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              disabledColor: Colors.grey,
+              elevation: 0,
+              color: Colors.deepPurple,
+              onPressed: () {},
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 80,
+                  vertical: 15,
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.deepPurple,
-                    width: 2,
-                  ),
-                ),
-                hintText: 'sample@mail.com',
-                labelText: 'Email',
-                labelStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                prefixIcon: Icon(
-                  Icons.alternate_email_sharp,
-                  color: Colors.deepPurple,
+                child: const Text(
+                  'Login',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
