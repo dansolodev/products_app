@@ -125,7 +125,7 @@ class _LoginForm extends StatelessWidget {
                     FocusScope.of(context).unfocus();
                     if (!loginForm.isValidForm()) return;
                     loginForm.isLoading = true;
-                    Future.delayed(const Duration(seconds: 2));
+                    await Future.delayed(const Duration(seconds: 3));
                     loginForm.isLoading = false;
                     Navigator.pushReplacementNamed(context, 'home');
                   },
