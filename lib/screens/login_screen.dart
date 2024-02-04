@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/providers/login_form_provider.dart';
+import 'package:provider/provider.dart';
+
 import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/widgets/widgets.dart';
 
@@ -28,7 +31,10 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    const _LoginForm()
+                    ChangeNotifierProvider(
+                      create: (_) => LoginFormProvider(),
+                      child: const _LoginForm(),
+                    )
                   ],
                 ),
               ),
@@ -58,7 +64,10 @@ class _LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginForm = Provider.of<LoginFormProvider>(context);
+
     return Form(
+      key: loginForm.formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -69,6 +78,9 @@ class _LoginForm extends StatelessWidget {
                 hintText: 'email@sample.com',
                 labelText: 'Email',
                 prefixIcon: Icons.alternate_email_sharp),
+            onChanged: (value) {
+              loginForm.email = value;
+            },
             validator: (value) {
               String pattern =
                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -89,6 +101,9 @@ class _LoginForm extends StatelessWidget {
                 hintText: '*****',
                 labelText: 'Password',
                 prefixIcon: Icons.lock),
+            onChanged: (value) {
+              loginForm.password = value;
+            },
             validator: (value) {
               if (value != null && value.length >= 6) return null;
               return 'La contraseña debe de ser de 6 caracteres';
@@ -104,7 +119,10 @@ class _LoginForm extends StatelessWidget {
             disabledColor: Colors.grey,
             elevation: 0,
             color: Colors.deepPurple,
-            onPressed: () {},
+            onPressed: () {
+              if (!loginForm.isValidForm()) return;
+              Navigator.pushReplacementNamed(context, 'home');
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 80,
