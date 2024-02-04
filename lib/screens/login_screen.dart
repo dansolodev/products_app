@@ -58,54 +58,65 @@ class _LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Form(
-        child: Column(
-          children: [
-            TextFormField(
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecorations.authInputDecoration(
-                  hintText: 'email@sample.com',
-                  labelText: 'Email',
-                  prefixIcon: Icons.alternate_email_sharp),
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        children: [
+          TextFormField(
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecorations.authInputDecoration(
+                hintText: 'email@sample.com',
+                labelText: 'Email',
+                prefixIcon: Icons.alternate_email_sharp),
+            validator: (value) {
+              String pattern =
+                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+              RegExp regExp = RegExp(pattern);
+              return regExp.hasMatch(value ?? '')
+                  ? null
+                  : 'El valor ingresado no luce como un correo';
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          TextFormField(
+            autocorrect: false,
+            obscureText: true,
+            keyboardType: TextInputType.text,
+            decoration: InputDecorations.authInputDecoration(
+                hintText: '*****',
+                labelText: 'Password',
+                prefixIcon: Icons.lock),
+            validator: (value) {
+              if (value != null && value.length >= 6) return null;
+              return 'La contraseña debe de ser de 6 caracteres';
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          MaterialButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              autocorrect: false,
-              obscureText: true,
-              keyboardType: TextInputType.text,
-              decoration: InputDecorations.authInputDecoration(
-                  hintText: '*****',
-                  labelText: 'Password',
-                  prefixIcon: Icons.lock),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            MaterialButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+            disabledColor: Colors.grey,
+            elevation: 0,
+            color: Colors.deepPurple,
+            onPressed: () {},
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 80,
+                vertical: 15,
               ),
-              disabledColor: Colors.grey,
-              elevation: 0,
-              color: Colors.deepPurple,
-              onPressed: () {},
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 80,
-                  vertical: 15,
-                ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: const Text(
+                'Login',
+                style: TextStyle(color: Colors.white),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
