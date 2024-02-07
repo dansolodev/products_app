@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/models/models.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final Product product;
+
+  const ProductCard({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,20 +18,27 @@ class ProductCard extends StatelessWidget {
         width: double.infinity,
         height: 400,
         decoration: _cardBorders(),
-        child: const Stack(
+        child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            _BackgroundImage(),
-            _ProductDetails(),
+            const _BackgroundImage(),
+            _ProductDetails(
+              productName: product.name,
+              productId: product.id ?? '',
+            ),
             Positioned(
               top: 0,
               right: 0,
-              child: _PriceTag(),
+              child: _PriceTag(
+                price: product.price.toString(),
+              ),
             ),
             Positioned(
               top: 0,
               left: 0,
-              child: _NotAvailable(),
+              child: _NotAvailable(
+                isAvailable: product.available,
+              ),
             ),
           ],
         ),
@@ -48,7 +61,11 @@ class ProductCard extends StatelessWidget {
 }
 
 class _NotAvailable extends StatelessWidget {
-  const _NotAvailable();
+  final bool isAvailable;
+  const _NotAvailable({
+    super.key,
+    required this.isAvailable,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +79,15 @@ class _NotAvailable extends StatelessWidget {
           bottomRight: Radius.circular(25),
         ),
       ),
-      child: const FittedBox(
+      child: FittedBox(
         fit: BoxFit.contain,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 10,
           ),
           child: Text(
-            'No disponible',
-            style: TextStyle(
+            isAvailable ? 'Disponible' : 'No disponible',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
             ),
@@ -82,7 +99,12 @@ class _NotAvailable extends StatelessWidget {
 }
 
 class _PriceTag extends StatelessWidget {
-  const _PriceTag();
+  final String price;
+
+  const _PriceTag({
+    super.key,
+    required this.price,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +119,15 @@ class _PriceTag extends StatelessWidget {
           bottomLeft: Radius.circular(25),
         ),
       ),
-      child: const FittedBox(
+      child: FittedBox(
         fit: BoxFit.contain,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 10,
           ),
           child: Text(
-            '\$103.99',
-            style: TextStyle(
+            '\$$price',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
             ),
@@ -117,7 +139,14 @@ class _PriceTag extends StatelessWidget {
 }
 
 class _ProductDetails extends StatelessWidget {
-  const _ProductDetails();
+  final String productName;
+  final String productId;
+
+  const _ProductDetails({
+    super.key,
+    required this.productName,
+    required this.productId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -128,12 +157,12 @@ class _ProductDetails extends StatelessWidget {
         width: double.infinity,
         height: 70,
         decoration: _buildBoxDecoration(),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Disco duro G',
-              style: TextStyle(
+              productName,
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -142,8 +171,8 @@ class _ProductDetails extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              'Id del disco duro',
-              style: TextStyle(fontSize: 15, color: Colors.white),
+              productId,
+              style: const TextStyle(fontSize: 15, color: Colors.white),
             ),
           ],
         ),
