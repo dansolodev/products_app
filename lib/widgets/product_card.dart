@@ -21,7 +21,7 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            const _BackgroundImage(),
+            _BackgroundImage(product.image),
             _ProductDetails(
               productName: product.name,
               productId: product.id ?? '',
@@ -30,16 +30,15 @@ class ProductCard extends StatelessWidget {
               top: 0,
               right: 0,
               child: _PriceTag(
-                price: product.price.toString(),
+                price: product.price,
               ),
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              child: _NotAvailable(
-                isAvailable: product.available,
+            if (!product.available)
+              const Positioned(
+                top: 0,
+                left: 0,
+                child: _NotAvailable(),
               ),
-            ),
           ],
         ),
       ),
@@ -61,11 +60,7 @@ class ProductCard extends StatelessWidget {
 }
 
 class _NotAvailable extends StatelessWidget {
-  final bool isAvailable;
-  const _NotAvailable({
-    super.key,
-    required this.isAvailable,
-  });
+  const _NotAvailable();
 
   @override
   Widget build(BuildContext context) {
@@ -79,15 +74,15 @@ class _NotAvailable extends StatelessWidget {
           bottomRight: Radius.circular(25),
         ),
       ),
-      child: FittedBox(
+      child: const FittedBox(
         fit: BoxFit.contain,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 10,
           ),
           child: Text(
-            isAvailable ? 'Disponible' : 'No disponible',
-            style: const TextStyle(
+            'No disponible',
+            style: TextStyle(
               color: Colors.white,
               fontSize: 20,
             ),
@@ -99,7 +94,7 @@ class _NotAvailable extends StatelessWidget {
 }
 
 class _PriceTag extends StatelessWidget {
-  final String price;
+  final double price;
 
   const _PriceTag({
     super.key,
@@ -190,19 +185,27 @@ class _ProductDetails extends StatelessWidget {
 }
 
 class _BackgroundImage extends StatelessWidget {
-  const _BackgroundImage();
+  final String? url;
+
+  const _BackgroundImage(this.url);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(25),
-      child: const SizedBox(
+      child: SizedBox(
         width: double.infinity,
         height: 400,
-        child: FadeInImage(
-          placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/400x300/F6F6F6'),
-        ),
+        child: url == null
+            ? const Image(
+                image: AssetImage('assets/no-image.png'),
+                fit: BoxFit.cover,
+              )
+            : FadeInImage(
+                placeholder: const AssetImage('assets/jar-loading.gif'),
+                image: NetworkImage(url!),
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
