@@ -22,6 +22,8 @@ class HomeScreen extends StatelessWidget {
         itemCount: productsServices.products.length,
         itemBuilder: (context, index) => GestureDetector(
           onTap: () {
+            productsServices.selectedProduct =
+                productsServices.products[index].copy();
             Navigator.of(context).pushNamed('product');
           },
           child: ProductCard(
