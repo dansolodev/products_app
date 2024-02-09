@@ -50,7 +50,10 @@ class ProductsServices extends ChangeNotifier {
     final url = Uri.https(_baseUrl, 'products/${product.id}.json');
     final response = await http.put(url, body: product.toRawJson());
     final decodedData = response.body;
-    print(decodedData);
+
+    final index = products.indexWhere((element) => element.id == product.id);
+    products[index] = product;
+
     return product.id ?? '';
   }
 }
