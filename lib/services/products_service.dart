@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:products_app/models/models.dart';
 
 class ProductsServices extends ChangeNotifier {
-  final String _baseUrl = 'flutter-varios-11d68-default-rtdb.firebaseio.com';
+  final String _baseUrl = '';
   final List<Product> products = [];
   late Product selectedProduct;
   bool isLoading = true;
+  bool isSaving = false;
 
   ProductsServices() {
     loadProducts();
@@ -28,5 +29,28 @@ class ProductsServices extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
     return products;
+  }
+
+  Future saveOrCreateProduct(Product product) async {
+    isSaving = true;
+    notifyListeners();
+
+    if (product.id == null) {
+      // Create
+    } else {
+      // Update
+      await updateProduct(product);
+    }
+
+    isSaving = false;
+    notifyListeners();
+  }
+
+  Future<String> updateProduct(Product product) async {
+    final url = Uri.https(_baseUrl, 'products/${product.id}.json');
+    final response = await http.put(url, body: product.toRawJson());
+    final decodedData = response.body;
+    print(decodedData);
+    return product.id ?? '';
   }
 }
