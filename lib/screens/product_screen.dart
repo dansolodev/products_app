@@ -62,11 +62,10 @@ class _ProductScreenBody extends StatelessWidget {
                           source: ImageSource.camera, imageQuality: 100);
 
                       if (pickedFile == null) {
-                        print('No seleccionó nada');
                         return;
                       }
-
-                      print('Tenemos imagen ${pickedFile.path}');
+                      productService
+                          .updateSelectedProductImage(pickedFile.path);
                     },
                     icon: const Icon(
                       Icons.camera_alt_outlined,
