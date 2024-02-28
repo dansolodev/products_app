@@ -146,9 +146,8 @@ class _SignupForm extends StatelessWidget {
                     } else {
                       // TODO: Mostrar error
                       print(errorMessage);
+                      loginForm.isLoading = false;
                     }
-
-                    loginForm.isLoading = false;
                   },
             child: Container(
               padding: const EdgeInsets.symmetric(
